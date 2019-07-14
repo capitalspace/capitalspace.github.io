@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
+<head>
+    <title>GitHub Pages automation with Pelican and CircleCI - CapitalSpace</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<link rel="canonical" href="/github-pages-automation-with-pelican-and-circleci.html">
+
+        <meta name="author" content="Harry Richardson" />
+        <meta name="description" content="An outline for using static site generators with github pages and CI." />
+
+        <meta property="og:site_name" content="CapitalSpace" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="GitHub Pages automation with Pelican and CircleCI"/>
+        <meta property="og:url" content="/github-pages-automation-with-pelican-and-circleci.html"/>
+        <meta property="og:description" content="An outline for using static site generators with github pages and CI."/>
+        <meta property="article:published_time" content="2019-07-13" />
+            <meta property="article:section" content="tutorial" />
+            <meta property="article:author" content="Harry Richardson" />
+
+
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="/theme/css/bootstrap.flatly.min.css" type="text/css"/>
+    <link href="/theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="/theme/css/pygments/native.css" rel="stylesheet">
+    <link rel="stylesheet" href="/theme/css/style.css" type="text/css"/>
+
+
+
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="/" class="navbar-brand">
+CapitalSpace            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                        <li >
+                            <a href="/category/informational.html">Informational</a>
+                        </li>
+                        <li class="active">
+                            <a href="/category/tutorial.html">Tutorial</a>
+                        </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+
+<!-- Banner -->
+<!-- End Banner -->
+
+<!-- Content Container -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="/github-pages-automation-with-pelican-and-circleci.html"
+                       rel="bookmark"
+                       title="Permalink to GitHub Pages automation with Pelican and CircleCI">
+                        GitHub Pages automation with Pelican and CircleCI
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2019-07-13T22:48:00-05:00"> Sat 13 July 2019</time>
+    </span>
+
+
+
+
+
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <h1>Github Pages automation with Pelican and CircleCI</h1>
+<p>When deciding the best way to document and represent this projects development I wanted to try something different. Traditionally I would have purchased a domain, configured a container for Ghost, an RDS instance for persistence, and something like Caddy configured with lets encrypt. However that's a considerable amount of configuration not to mention overhead to host a few paragraphs and images. </p>
+<h2>Enter Pelican</h2>
+<ul>
+<li>Python ✓</li>
+<li>Programatic ✓</li>
+<li>Static Pages ✓</li>
+<li>GitHub Pages Compatible ✓</li>
+</ul>
+<p>Pelican is a static site generator built in Python. As a developer who cut his teeth on PHP and Java in the early '00's, I left static websites back with my orange <em>Complete Idiots Guide to HTML4</em>. However if you'll take a closer look at the development patterns we've cultivated, the prevelance of technology like CI/CD and services like GitHub pages static site generators coupled with the correct tools are in a great position to simplify the blogging process for basically free. What's to lose you're already in github.</p>
+<h2>CircleCI</h2>
+<p>It's CI, there's YAML configuration files and containers, your standard setup. One thing I will give CircleCI though is that they were by far the easiest to setup and configure for a quick thing like this. I logged into CircleCI with my GitHub login, authorized the application, selected the repo from their page, and dropped my secrets into the webpage. I spent some time screwing around with TravisCI, however the requirements for encrypting variables required ruby and some gems, and while totally useable I will fully admit to being too lazy to bother and that's how CircleCI won.</p>
+<h2>GitHub Pages</h2>
+<p>Simply put it behaves like a git repo meets Cloud Object Storage. The files you upload are the files that are displayed. The URL is based off of the repo name. As of the writing of this article <code>username.github.io</code> where username is either your users name or organization name, as in the case of this site. It's fairly self explanatory, but more information can be found <a href="https://help.github.com/en/categories/github-pages-basics">here</a></p>
+<h2>Design Architecture</h2>
+<p>There are a million ways to skin this cat, but my personal choice involves setting up two repos. One for the source which can be private if you wish, and one for the actual pages setup.</p>
+<ul>
+<li><code>username.github.io-source</code></li>
+<li>Will contain the source for generating the site.</li>
+<li><code>username.github.io</code></li>
+<li>Will contain the generated site and resources.</li>
+</ul>
+<p>The folder structure of <code>username.github.io-source</code> should look a little something like this.</p>
+<div class="highlight"><pre><span></span><span class="p">.</span>
+<span class="err">├</span> <span class="n">Makefile</span>
+<span class="err">├</span> <span class="n">pelicanconf</span><span class="p">.</span><span class="n">py</span>
+<span class="err">├</span> <span class="n">publishconf</span><span class="p">.</span><span class="n">py</span>
+<span class="err">├</span> <span class="n">requirements</span><span class="p">.</span><span class="n">txt</span>
+<span class="err">├</span> <span class="n">tasks</span><span class="p">.</span><span class="n">py</span>
+<span class="err">├</span> <span class="n">theme</span>
+<span class="err">├</span> <span class="n">content</span>
+<span class="err">├</span> <span class="k">output</span>
+<span class="err">├</span> <span class="n">plugins</span>
+<span class="err">└</span> <span class="p">.</span><span class="n">circleci</span>
+    <span class="err">└</span> <span class="n">config</span>
+</pre></div>
+
+
+<p>We will write our markdown articles into the content folder and commit them to the source repo. Our repo will let CircleCI know that we've pushed a new build and to run our CI. Our CI will preform the following actions</p>
+<ul>
+<li>Clone this latest push from <code>username.github.io-source</code></li>
+<li>Run <code>make clean</code> removing any existing output folder</li>
+<li>Regenerate our site from the latest push into a new output folder</li>
+<li>Clone the master branch of <code>username.github.io</code> into a subfolder.</li>
+<li>Let Rsync do the heavy lifting of deciding whats new, whats old, and move it to the subfolder</li>
+<li>Preform Git operations to add the files, commit, and push to master to update the pages.</li>
+</ul>
+<h2>Getting Started</h2>
+<h3>Prerequisites</h3>
+<p>We'll make this as painless as possible using Python Virtual Environments, and I will assume you're using SSH keys with github.</p>
+<p>Go ahead and create the two repos that we'll need.</p>
+<ul>
+<li><code>username.github.io-source</code></li>
+<li>Will contain the source for generating the site.</li>
+<li><code>username.github.io</code></li>
+<li>Will contain the generated site and resources.</li>
+</ul>
+<p>Make a quick working directory if you need it and cd to it</p>
+<div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">~/</span><span class="n">blog</span><span class="o">/</span>
+<span class="n">cd</span> <span class="o">~/</span><span class="n">blog</span><span class="o">/</span>
+</pre></div>
+
+
+<p>Clone the source repo.</p>
+<div class="highlight"><pre><span></span><span class="n">git</span><span class="w"> </span><span class="n">clone</span><span class="w"> </span><span class="n">git</span><span class="nv">@github</span><span class="p">.</span><span class="nl">com</span><span class="p">:</span><span class="n">username</span><span class="o">/</span><span class="n">username</span><span class="p">.</span><span class="n">github</span><span class="p">.</span><span class="n">io</span><span class="o">-</span><span class="n">source</span><span class="p">.</span><span class="n">git</span><span class="w"></span>
+</pre></div>
+
+
+<p>Change to it</p>
+<div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">username</span><span class="p">.</span><span class="n">github</span><span class="p">.</span><span class="n">io</span><span class="o">-</span><span class="k">source</span><span class="o">/</span>
+</pre></div>
+
+
+<p>Setup our virtualenv. If you are not familiar this will allow us to install python packages with pip without messing up system configurations. The caveat being that you are required to source an activation script to setup pathing.</p>
+<div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">venv</span> <span class="n">venv</span>
+</pre></div>
+
+
+<p>or</p>
+<div class="highlight"><pre><span></span><span class="n">virtualenv</span> <span class="c1">--python=python3.5 venv</span>
+</pre></div>
+
+
+<p>Activating the virtualenvironment</p>
+<div class="highlight"><pre><span></span><span class="k">source</span> <span class="n">venv</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">activate</span>
+</pre></div>
+
+
+<p>Now that we are using the correct paths, we need to install pelican and the required dependencies using pip.</p>
+<div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pelican</span> <span class="n">markdown</span> <span class="n">ghp</span><span class="o">-</span><span class="n">import</span>
+</pre></div>
+
+
+<p><em>Recap Prerequisites</em>
+* Created two GitHub Repos.
+  * <code>username.github.io</code>
+    * Holds generated content for pages
+  * <code>username.github.io-source</code>
+    * Holds source and CI configurations for pages
+* Created a working directory and cloned our <code>username.github.io-source</code> repo
+* Created, Configured, and activated our virtualenv
+* Installed Pelican dependencies</p>
+<h3>Configuring Pelican</h3>
+<p>Pelican has a quickstart option that will run a quick wizard to get some answers from you and setup a basic configuration file. Below are the options I chose</p>
+<div class="highlight"><pre><span></span><span class="nv">pelican</span><span class="o">-</span><span class="nv">quickstart</span>
+
+<span class="o">&gt;</span> <span class="nv">Where</span> <span class="k">do</span> <span class="nv">you</span> <span class="nv">want</span> <span class="nv">to</span> <span class="nv">create</span> <span class="nv">your</span> <span class="nv">new</span> <span class="nv">web</span> <span class="nv">site</span>? [.] .<span class="o">/</span>
+<span class="o">&gt;</span> <span class="nv">What</span> <span class="nv">will</span> <span class="nv">be</span> <span class="nv">the</span> <span class="nv">title</span> <span class="nv">of</span> <span class="nv">this</span> <span class="nv">web</span> <span class="nv">site</span>? <span class="nv">my</span> <span class="nv">blog</span>
+<span class="o">&gt;</span> <span class="nv">Who</span> <span class="nv">will</span> <span class="nv">be</span> <span class="nv">the</span> <span class="nv">author</span> <span class="nv">of</span> <span class="nv">this</span> <span class="nv">web</span> <span class="nv">site</span>? <span class="nv">blog</span>
+<span class="o">&gt;</span> <span class="nv">What</span> <span class="nv">will</span> <span class="nv">be</span> <span class="nv">the</span> <span class="nv">default</span> <span class="nv">language</span> <span class="nv">of</span> <span class="nv">this</span> <span class="nv">web</span> <span class="nv">site</span>? [<span class="nv">en</span>] <span class="nv">en</span>
+<span class="o">&gt;</span> <span class="k">Do</span> <span class="nv">you</span> <span class="nv">want</span> <span class="nv">to</span> <span class="nv">specify</span> <span class="nv">a</span> <span class="nv">URL</span> <span class="nv">prefix</span>? <span class="nv">e</span>.<span class="nv">g</span>., <span class="nv">http</span>:<span class="o">//</span><span class="nv">example</span>.<span class="nv">com</span>   <span class="ss">(</span><span class="nv">Y</span><span class="o">/</span><span class="nv">n</span><span class="ss">)</span> <span class="nv">n</span>
+<span class="o">&gt;</span> <span class="k">Do</span> <span class="nv">you</span> <span class="nv">want</span> <span class="nv">to</span> <span class="nv">enable</span> <span class="nv">article</span> <span class="nv">pagination</span>? <span class="ss">(</span><span class="nv">Y</span><span class="o">/</span><span class="nv">n</span><span class="ss">)</span> <span class="nv">y</span>
+<span class="o">&gt;</span> <span class="nv">How</span> <span class="nv">many</span> <span class="nv">articles</span> <span class="nv">per</span> <span class="nv">page</span> <span class="k">do</span> <span class="nv">you</span> <span class="nv">want</span>? [<span class="mi">10</span>] <span class="mi">10</span>
+<span class="o">&gt;</span> <span class="nv">What</span> <span class="nv">is</span> <span class="nv">your</span> <span class="nv">time</span> <span class="nv">zone</span>? [<span class="nv">Europe</span><span class="o">/</span><span class="nv">Paris</span>] <span class="nv">America</span><span class="o">/</span><span class="nv">Chicago</span>
+<span class="o">&gt;</span> <span class="k">Do</span> <span class="nv">you</span> <span class="nv">want</span> <span class="nv">to</span> <span class="nv">generate</span> <span class="nv">a</span> <span class="nv">Fabfile</span><span class="o">/</span><span class="nv">Makefile</span> <span class="nv">to</span> <span class="nv">automate</span> <span class="nv">generation</span> <span class="nv">and</span> <span class="nv">publishing</span>? <span class="ss">(</span><span class="nv">Y</span><span class="o">/</span><span class="nv">n</span><span class="ss">)</span> <span class="nv">Y</span> <span class="o">**</span># <span class="nv">PAY</span> <span class="nv">ATTENTION</span> <span class="nv">TO</span> <span class="nv">THIS</span><span class="o">!**</span>
+</pre></div>
+
+
+<p>The most important for the sake of this tutorial is the Makefile. This will simplify much of the work later for our CI configuration and deployment scripts.</p>
+<p><em>Configuring Pelican Recap</em>
+* Ran <code>pelican-quickstart</code> inside of our source repo.
+* Answered Yes to the Makefile question.</p>
+<h2>Configuring CircleCI and GitHub</h2>
+<p>From GitHub settings you will need to generate a personal access token with the rights to the <code>username.github.io</code> repo. Be sure to save this as you can only view it once.</p>
+<p>Log into CircleCI using your github credentials and enable your first repo following the instructions. Once it's selected, select workflows again, and click the gear icon next to the repo name. Create a new variable under Environment Variables named <code>GH_TOKEN</code> with the value you gathered earlier.</p>
+<h3>CircleCI config</h3>
+<p>CircleCI looks for <code>.circleci/config</code> so lets make it happen.</p>
+<div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">~/</span><span class="n">blog</span><span class="o">/</span><span class="n">username</span><span class="p">.</span><span class="n">github</span><span class="p">.</span><span class="n">io</span><span class="o">-</span><span class="k">source</span><span class="o">/</span><span class="p">.</span><span class="n">circleci</span>
+</pre></div>
+
+
+<p>Let's create a config file and use a slightly modified basic config file from CircleCI</p>
+<div class="highlight"><pre><span></span><span class="n">vim</span> <span class="o">~/</span><span class="n">blog</span><span class="o">/</span><span class="n">username</span><span class="p">.</span><span class="n">github</span><span class="p">.</span><span class="n">io</span><span class="o">-</span><span class="k">source</span><span class="o">/</span><span class="p">.</span><span class="n">circleci</span><span class="o">/</span><span class="n">config</span><span class="p">.</span><span class="n">yml</span>
+</pre></div>
+
+
+<p>The following are the contents</p>
+<div class="highlight"><pre><span></span><span class="c1"># Python CircleCI 2.0 configuration file</span>
+<span class="c1">#</span>
+<span class="c1"># Check https://circleci.com/docs/2.0/language-python/ for more details</span>
+<span class="c1">#</span>
+<span class="nt">version</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="nt">jobs</span><span class="p">:</span>
+<span class="nt">build</span><span class="p">:</span>
+    <span class="nt">docker</span><span class="p">:</span>
+    <span class="c1"># specify the version you desire here</span>
+    <span class="c1"># use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`</span>
+    <span class="p p-Indicator">-</span> <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">circleci/python:3.6.1</span>
+
+    <span class="c1"># Specify service dependencies here if necessary</span>
+    <span class="c1"># CircleCI maintains a library of pre-built images</span>
+    <span class="c1"># documented at https://circleci.com/docs/2.0/circleci-images/</span>
+    <span class="c1"># - image: circleci/postgres:9.4</span>
+
+    <span class="nt">working_directory</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">~/repo</span>
+
+    <span class="nt">steps</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">checkout</span>
+
+    <span class="c1"># Download and cache dependencies</span>
+    <span class="p p-Indicator">-</span> <span class="nt">restore_cache</span><span class="p">:</span>
+        <span class="nt">keys</span><span class="p">:</span>
+            <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">v1-dependencies-{{ checksum &quot;requirements.txt&quot; }}</span>
+            <span class="c1"># fallback to using the latest cache if no exact match is found</span>
+            <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">v1-dependencies-</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">run</span><span class="p">:</span>
+        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">install dependencies</span>
+        <span class="nt">command</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+            <span class="no">python3 -m venv venv</span>
+            <span class="no">. venv/bin/activate</span>
+            <span class="no">pip install -r requirements.txt</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">save_cache</span><span class="p">:</span>
+        <span class="nt">paths</span><span class="p">:</span>
+            <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./venv</span>
+        <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">v1-dependencies-{{ checksum &quot;requirements.txt&quot; }}</span>
+
+    <span class="c1"># pelican</span>
+    <span class="p p-Indicator">-</span> <span class="nt">run</span><span class="p">:</span>
+        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Do the Apt Dance</span>
+        <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sudo apt update &amp;&amp; sudo apt upgrade &amp;&amp; sudo apt install rsync</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">run</span><span class="p">:</span>
+        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Cleanup old files</span>
+        <span class="nt">command</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+            <span class="no">. venv/bin/activate</span>
+            <span class="no">make clean</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">run</span><span class="p">:</span>
+        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Build the site</span>
+        <span class="nt">command</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+            <span class="no">. venv/bin/activate</span>
+            <span class="no">make html</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">run</span><span class="p">:</span>
+        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Run Deploy Script</span>
+        <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">. deploy.sh</span>
+</pre></div>
+
+
+<p><em>Configuring CircleCI and GitHub Recap</em></p>
+<ul>
+<li>Generated a Personal Access Token with read and write access to <code>username.github.io</code></li>
+<li>Linked CircleCI with GitHub account</li>
+<li>Enabled your <code>username.github.io-source</code> repo in CircleCI workflows</li>
+<li>Setup your Personal Access Token as <code>GH_TOKEN</code> in CircleCI environment variables</li>
+<li>Create the <code>.circleci/config.yml</code> and your config</li>
+</ul>
+<h2>Creating a deployment script</h2>
+<p>A very basic deployment script to clone the pages repo and copy over the created data. </p>
+<p>Drop this in the main folder of the source repo. <code>deploy.sh</code> was my choice.</p>
+<div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+<span class="nv">BRANCH</span><span class="o">=</span>master
+<span class="nv">TARGET_REPO</span><span class="o">=</span>username/username.github.io.git
+<span class="nv">PELICAN_OUTPUT_FOLDER</span><span class="o">=</span><span class="s1">&#39;output&#39;</span>
+
+git config --global user.email <span class="s2">&quot;something@something.com&quot;</span>
+git config --global user.name <span class="s2">&quot;CircleCI&quot;</span>
+git clone --quiet --branch<span class="o">=</span><span class="nv">$BRANCH</span> https://<span class="si">${</span><span class="nv">GH_TOKEN</span><span class="si">}</span>@github.com/<span class="nv">$TARGET_REPO</span> built_website &gt; /dev/null
+<span class="nb">cd</span> built_website
+rsync -rv --exclude<span class="o">=</span>.git /home/circleci/repo/<span class="nv">$PELICAN_OUTPUT_FOLDER</span>/* ./
+git add -f .
+git commit -m <span class="s2">&quot;CircleCI  </span><span class="nv">$CIRCLE_BUILD_NUM</span><span class="s2"> pushed to GithubPages&quot;</span>
+git push -fq origin <span class="nv">$BRANCH</span> &gt; /dev/null
+<span class="nb">echo</span> -e <span class="s2">&quot;Deploy Completed </span><span class="nv">$CIRCLE_BUILD_URL</span><span class="s2"> !&quot;</span>
+</pre></div>
+
+
+<h2>A little Extra for simplicity</h2>
+<p>Since the main concept of our exercise is to include blogging/documentation into our daily command line workflow, we will want to simplify the creation of articles</p>
+<ul>
+<li>Collect article metadata through terminal prompts</li>
+<li>Format the metadata into a file with a name derived from the title</li>
+<li>Open that file for editing with VIM</li>
+<li>Once edited offer to add files, commit, and push to source repo.</li>
+</ul>
+<p>Below is our <code>postandpublish.sh</code></p>
+<div class="highlight"><pre><span></span><span class="nb">read</span> -p <span class="s1">&#39;Title: &#39;</span> titlevar
+<span class="nb">read</span> -p <span class="s1">&#39;Author: &#39;</span> authorvar
+<span class="nb">read</span> -p <span class="s1">&#39;Category: &#39;</span> categoryvar
+<span class="nb">read</span> -p <span class="s1">&#39;Tags: &#39;</span> tagsvar
+<span class="nb">read</span> -p <span class="s1">&#39;Summary: &#39;</span> summaryvar
+<span class="nb">read</span> -p <span class="s1">&#39;Slug: &#39;</span> slugvar
+
+<span class="nb">echo</span> <span class="s2">&quot;Setup Dates\n&quot;</span>
+<span class="nb">printf</span> -v ymd <span class="s1">&#39;%(%Y-%m-%d)T&#39;</span> -1
+<span class="nb">printf</span> -v hm <span class="s1">&#39;%(%H:%M)T&#39;</span> -1
+<span class="nb">printf</span> -v date <span class="s1">&#39;%(%Y-%m-%d %H:%M)T&#39;</span> -1
+
+<span class="nb">echo</span> <span class="s2">&quot;Setup Dir Definitions\n&quot;</span>
+<span class="nv">CUR_DIR</span><span class="o">=</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>
+<span class="nv">CONTENT_PATH</span><span class="o">=</span><span class="s1">&#39;content&#39;</span>
+<span class="nv">FOLDER_PATH</span><span class="o">=</span><span class="nv">$CUR_DIR</span>/<span class="nv">$CONTENT_PATH</span>/<span class="k">$(</span>date +<span class="s2">&quot;%Y&quot;</span><span class="k">)</span>
+<span class="nv">FILENAME</span><span class="o">=</span><span class="si">${</span><span class="nv">titlevar</span><span class="p">// /-</span><span class="si">}</span>-<span class="nv">$ymd</span>.md
+
+<span class="nv">VIM</span><span class="o">=</span>/usr/bin/vim
+<span class="nv">GIT</span><span class="o">=</span>/usr/bin/git
+<span class="nv">BRANCH</span><span class="o">=</span><span class="s1">&#39;master&#39;</span>
+<span class="nv">COMMIT</span><span class="o">=</span><span class="s1">&#39;commit -am &#39;</span>
+<span class="nv">PUSH</span><span class="o">=</span><span class="s1">&#39;push -u origin&#39;</span>
+<span class="nv">TRACK_FILES</span><span class="o">=</span><span class="s1">&#39;add .&#39;</span>
+
+<span class="nv">CONTENT</span><span class="o">=</span><span class="s2">&quot;Title: </span><span class="nv">$titlevar</span><span class="s2">\nAuthor: </span><span class="nv">$authorvar</span><span class="s2">\nDate: </span><span class="nv">$date</span><span class="s2">\nCategory: </span><span class="nv">$categoryvar</span><span class="s2">\nTags: </span><span class="nv">$tagsvar</span><span class="s2">\nSummary: </span><span class="nv">$summaryvar</span><span class="s2">\nSlug: </span><span class="nv">$slugvar</span><span class="s2">\n\nStartBlog&quot;</span>
+
+makefolder <span class="o">()</span> <span class="o">{</span>
+        <span class="nb">echo</span> -e <span class="s2">&quot;Creating folder </span><span class="nv">$1</span><span class="s2">\n&quot;</span>
+        mkdir -p <span class="nv">$1</span>
+<span class="o">}</span>
+
+createfile <span class="o">()</span> <span class="o">{</span>
+        <span class="nb">echo</span> -e <span class="s2">&quot;Creating file </span><span class="nv">$1</span><span class="s2"> in </span><span class="nv">$2</span><span class="s2">\n&quot;</span>
+        <span class="nb">echo</span> -e <span class="s2">&quot;</span><span class="nv">$3</span><span class="s2">&quot;</span> &gt;&gt; <span class="nv">$2</span>/<span class="nv">$1</span>
+<span class="o">}</span>
+
+editfile <span class="o">()</span> <span class="o">{</span>
+        <span class="nv">$VIM</span> <span class="nv">$2</span>/<span class="nv">$1</span>
+<span class="o">}</span>
+
+commitandpush <span class="o">()</span> <span class="o">{</span>
+        <span class="nb">read</span> -p <span class="s1">&#39;Would you like to add, commit and push?&#39;</span> -n <span class="m">1</span> -r
+        <span class="nb">echo</span>
+        <span class="k">if</span> <span class="o">[[</span> <span class="s2">&quot;</span><span class="nv">$REPLY</span><span class="s2">&quot;</span> <span class="o">=</span>~ ^<span class="o">[</span>Yy<span class="o">]</span>$ <span class="o">]]</span> <span class="p">;</span> <span class="k">then</span>
+                <span class="nb">echo</span> -e <span class="s2">&quot;Telling Git to watch new files\n&quot;</span>
+                <span class="nv">$GIT</span> <span class="nv">$TRACK_FILES</span>
+                <span class="nb">read</span> -p <span class="s1">&#39;commit message: &#39;</span> COMMIT_MESSAGE
+                <span class="nv">$GIT</span> <span class="nv">$COMMIT</span> <span class="s2">&quot;</span><span class="nv">$COMMIT_MESSAGE</span><span class="s2">&quot;</span>
+                <span class="nb">echo</span> -e <span class="s2">&quot;commit message assigned, pushing\n&quot;</span>
+                <span class="nv">$GIT</span> <span class="nv">$PUSH</span> <span class="nv">$BRANCH</span>
+                <span class="nb">echo</span> -e <span class="s2">&quot;pushed\n&quot;</span>
+        <span class="k">fi</span>
+<span class="o">}</span>
+
+
+<span class="k">if</span> makefolder <span class="nv">$FOLDER_PATH</span> <span class="p">;</span> <span class="k">then</span>
+        <span class="k">if</span> createfile <span class="s2">&quot;</span><span class="nv">$FILENAME</span><span class="s2">&quot;</span> <span class="s2">&quot;</span><span class="nv">$FOLDER_PATH</span><span class="s2">&quot;</span> <span class="s2">&quot;</span><span class="nv">$CONTENT</span><span class="s2">&quot;</span> <span class="p">;</span> <span class="k">then</span>
+                <span class="k">if</span> editfile <span class="nv">$FILENAME</span> <span class="nv">$FOLDER_PATH</span> <span class="p">;</span> <span class="k">then</span>
+                        <span class="nb">echo</span> -e <span class="s2">&quot;Done Editing!\n&quot;</span>
+                        <span class="k">if</span> commitandpush <span class="p">;</span> <span class="k">then</span>
+                                <span class="nb">echo</span> <span class="s2">&quot;All finished&quot;</span>
+                        <span class="k">else</span>
+                                <span class="nb">echo</span> <span class="s2">&quot;Git Operations Failed&quot;</span>
+                        <span class="k">fi</span>
+                <span class="k">else</span>
+                        <span class="nb">echo</span> -e <span class="s2">&quot;Failed to edit file&quot;</span>
+                <span class="k">fi</span>
+        <span class="k">else</span>
+                <span class="nb">echo</span> -e <span class="s2">&quot;Faied to create file&quot;</span>
+        <span class="k">fi</span>
+<span class="k">fi</span>
+</pre></div>
+            </div>
+            <!-- /.entry-content -->
+        </article>
+    </section>
+
+        </div>
+        <div class="col-sm-3" id="sidebar">
+            <aside>
+<!-- Sidebar -->
+<section class="well well-sm">
+  <ul class="list-group list-group-flush">
+
+<!-- Sidebar/Social -->
+<li class="list-group-item">
+  <h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Social</span></h4>
+  <ul class="list-group" id="social">
+    <li class="list-group-item"><a href="https://twitter.com/CapitalSpace2"><i class="fa fa-twitter-square fa-lg"></i> Twitter</a></li>
+  </ul>
+</li>
+<!-- End Sidebar/Social -->
+  </ul>
+</section>
+<!-- End Sidebar -->            </aside>
+        </div>
+    </div>
+</div>
+<!-- End Content Container -->
+
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy; 2019 Harry Richardson
+            &middot; Powered by <a href="https://github.com/getpelican/pelican-themes/tree/master/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="/theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="/theme/js/respond.min.js"></script>
+
+
+
+
+</body>
+</html>
