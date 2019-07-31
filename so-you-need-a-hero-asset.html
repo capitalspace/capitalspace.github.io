@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
+<head>
+    <title>So you need a hero asset - CapitalSpace</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<link rel="canonical" href="/so-you-need-a-hero-asset.html">
+
+        <meta name="author" content="Harry Richardson" />
+        <meta name="keywords" content="dev,3d" />
+        <meta name="description" content="Hiring a 3D artist to create hero assets" />
+
+        <meta property="og:site_name" content="CapitalSpace" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="So you need a hero asset"/>
+        <meta property="og:url" content="/so-you-need-a-hero-asset.html"/>
+        <meta property="og:description" content="Hiring a 3D artist to create hero assets"/>
+        <meta property="article:published_time" content="2019-07-31" />
+            <meta property="article:section" content="Development" />
+            <meta property="article:tag" content="dev" />
+            <meta property="article:tag" content="3d" />
+            <meta property="article:author" content="Harry Richardson" />
+
+
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="/theme/css/bootstrap.flatly.min.css" type="text/css"/>
+    <link href="/theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="/theme/css/pygments/native.css" rel="stylesheet">
+    <link rel="stylesheet" href="/theme/css/style.css" type="text/css"/>
+
+
+
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="/" class="navbar-brand">
+CapitalSpace            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                        <li class="active">
+                            <a href="/category/development.html">Development</a>
+                        </li>
+                        <li >
+                            <a href="/category/informational.html">Informational</a>
+                        </li>
+                        <li >
+                            <a href="/category/tutorial.html">Tutorial</a>
+                        </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+
+<!-- Banner -->
+<!-- End Banner -->
+
+<!-- Content Container -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="/so-you-need-a-hero-asset.html"
+                       rel="bookmark"
+                       title="Permalink to So you need a hero asset">
+                        So you need a hero asset
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2019-07-31T13:33:00-05:00"> Wed 31 July 2019</time>
+    </span>
+
+
+
+
+
+<span class="label label-default">Tags</span>
+	<a href="/tag/dev.html">dev</a>
+        /
+	<a href="/tag/3d.html">3d</a>
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <h1>Midlothian Hero Ship Development</h1>
+<p><img alt="Midlothian Lateral View WORK IN PROGRESS" src="https://cdn.discordapp.com/attachments/405423301867995139/606143240776712192/Lateral-Midlothian.png"></p>
+<h3>Proof of concept</h3>
+<p>When I began developing CapitalSpace I spent a few bucks on the Unity asset store to get some placeholder spaceships and other pieces to use in proof of concepts. I eventually reached a point where I needed to start creating mechanics and not be fiddling with constant scaling issues. I reached out to some contacts and was able to secure a fantastic Sci-Fi artist to start working on the Hero ship and hopefully in the future some UI assets. </p>
+<h3>What did we need?</h3>
+<p>That's a good question, and since we haven't finished this process I can't outline everything. However my main goal was to have a solid tangible base, and what better place to start than the thing the player will spend most of their time looking at.  With that said there were some basic requirements.</p>
+<ul>
+<li><code>Length:</code> ~1km</li>
+<li><code>Armaments</code></li>
+<li>~24 Main Turreted Weapon Stations</li>
+<li>~12 Main Missile Silos</li>
+<li>~100x Point Defense Cannons</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="o">**</span><span class="n">NOTE</span><span class="o">**</span>
+<span class="n">There</span> <span class="k">are</span> <span class="k">some</span> <span class="n">notes</span> <span class="n">here</span> <span class="k">first</span> <span class="k">and</span> <span class="n">foremost</span> <span class="n">being</span> <span class="n">that</span> <span class="k">all</span> <span class="k">of</span> <span class="n">this</span> <span class="k">is</span> <span class="n">up</span> <span class="k">in</span> <span class="n">the</span> <span class="n">air</span> <span class="n">aside</span> <span class="k">from</span> <span class="n">the</span>
+<span class="k">length</span> <span class="k">of</span> <span class="n">the</span> <span class="n">ship</span><span class="p">,</span> <span class="k">and</span> <span class="n">the</span> <span class="nb">number</span> <span class="k">of</span> <span class="n">armaments</span> <span class="k">is</span> <span class="n">heavily</span> <span class="n">influenced</span> <span class="k">by</span> <span class="n">the</span> <span class="n">Galactica</span> <span class="k">from</span> <span class="n">the</span> <span class="mi">2004</span>
+<span class="n">reboot</span><span class="p">.</span>
+</pre></div>
+
+
+<p>Knowing the scale of our ship being 1km will help us scale out other objects in the universe.</p>
+<h1>Hero Asset</h1>
+<h3>Starting Out</h3>
+<p>The first stage in creating our hero asset is to have a good idea of what you are looking for, but also realize that you are hiring a 3d artist, and they are creating for you whatever image you give them. I know what I like in a Capital ship from an aesthetic view, and having spent some time learning about naval ships over history, I believe I have a pretty good idea of what form would follow the function of a capital ship that needed to have several functions beyond "Seal Clubbing Warship." So I reached out to a few folks to see if they were interested in tackling a hero asset, and potentially more down the road. When I found an artist whos work I enjoyed and I felt comfortable with we sat down to hash out the details.</p>
+<h2>Pay your fucking artists</h2>
+<h3>You can't buy food or electricity with exposure</h3>
+<p>It's simple, if you think that you have enough exposure that you can pay your artist in it, you do not. 3D art is a real skill, not everyone is the same, and you and your artist need to have a professional adult conversation of compensation. I realize that not all projects can afford to hire folks, and that's an individual hurdle that each project will need to tackle, and is not something that I can offer any guidance on. You may hop on the Asset store, and see a pack like <a href="https://assetstore.unity.com/packages/3d/environments/sci-fi/polygon-sci-fi-space-pack-138857">this</a> and think to yourself, great this shouldn't be too expensive, but please remember that you aren't getting custom work that you sought out from a human who needs to eat and keep the lights on. </p>
+<h3>Negotiations and Payment</h3>
+<p>At the end of the day, that's up to you and your artist, but as a project manager you need to go into this contract with some preparation. I have been working in tech since the mid 2000's, and as of 2015 or so in Texas entry level tech jobs answering phones for custom products pay around 12-15$/hr. You can use something like glassdoor to see what skilled technical labor in the artists region pays. If you are seeking skilled labor, please do this first, so you don't undercut people, unless that's what you want to do. I also spoke to some people in the field, about what I was looking for and a ballpark on what I should pay. </p>
+<p>After viewing the artists portfolios and armed with this information, I went into the conversation with my chosen artist and explained what I was looking for. This consisted of several things </p>
+<ul>
+<li>Physical Description</li>
+<li>A high fidelity 3D capital ship model for use in a video game</li>
+<li>Turrets (Main turrets, and smaller Point Defense turrets)</li>
+<li>Missile Silos</li>
+<li>Munitions for the Armaments</li>
+<li>Shapes (this matters depending on how realistic you are going. for example certain EM frequencies like Radar bounce off rounded surfaces easily) for aesthetics.</li>
+<li>Any example work you would like elements drawn from</li>
+<li>Spiritual Description</li>
+<li>synopsis of the environment</li>
+<li>synopsis of the government and type of crew</li>
+<li>synopsis of technobabble (Newtonian movement physics? Do you need forward and rear facing engines for stopping without turning around, etc) </li>
+</ul>
+<p>We then spent some time discussing fidelity levels, Turret design (requirements for game engine, how many articulating parts, etc), and how long the artist believe that it would take to do the work. I should also note that during this part of the conversation the artist brought up to me that unless I know exactly what I wanted that we should do a couple of rough outlines to pick a style. </p>
+<p>We ended up agreeing on a set of 3D models for a flat price. Remember to speak with your artist about licensing.</p>
+<ul>
+<li>3 prototype ship designs</li>
+<li>pick one of the 3 for the final style</li>
+<li>1 Hero Ship</li>
+<li>Turrets</li>
+<li>RailGun</li>
+<li>Flak / Cannon</li>
+<li>Missile </li>
+</ul>
+<h1>Enter Midlothian</h1>
+<p><img alt="Midlothian concept design" src="https://cdn.discordapp.com/attachments/600421724990865439/603324204078858268/Concept_III-I.png"></p>
+<p>Now the fun part, below is the first rough model after the concept phase. There will be changes to the design as we move forward, some upcoming changes already in the works are increased width towards the end of the ship to increase the size of the engine section. </p>
+<h2>Hull</h2>
+<p>After a few refinements and feedback sessions.</p>
+<p><em>Dorsal view</em>
+Chose a more angular forward ship assembly
+<img alt="Midlothian Dorsal View WORK IN PROGRESS" src="https://cdn.discordapp.com/attachments/405423301867995139/606144790366519296/unknown.png"></p>
+<p><em>Lateral view</em>
+Concept for having an illuminated ship identification section
+<img alt="Midlothian Lateral View WORK IN PROGRESS" src="https://cdn.discordapp.com/attachments/405423301867995139/606143240776712192/Lateral-Midlothian.png"></p>
+<p><em>Coronal view</em>
+Forward view of our ship including Main turret elevation for forward firing
+<img alt="Midlothian Coronal View WORK IN PROGRESS" src="https://cdn.discordapp.com/attachments/405423301867995139/606147058465767434/midlothian.png"></p>
+<h2>Armaments</h2>
+<p>A variety of armaments have been created.</p>
+<p><em>Left to right</em>
+Main Turret (Flak Cannisters or Shells), Quad Cannon, Dual Cannon, 3x Missile Turret, 2x Missile turret, Embedded launch tubes
+<img alt="Turret and silos" src="https://cdn.discordapp.com/attachments/504380580054564865/606183509622784000/Midlothian-Weapons.png"></p>
+<p><em>Capital Ship Class Missile Silos</em>
+<img alt="Vapital Sized Silos" src="https://cdn.discordapp.com/attachments/600421724990865439/604432712316485643/afe0f396cd9d866dab5403437d570643.png"></p>
+<p><em>Embedded launch tubes</em>
+<img alt="Embedded launch tubes" src="https://cdn.discordapp.com/attachments/600421724990865439/604232606497767434/bfa4c3e369c177445b6c68ed116ff81b.png"></p>
+<p><em>Mounted 3x Missile Turret</em>
+<img alt="3x Missile Turret" src="https://cdn.discordapp.com/attachments/600421724990865439/604232611656892436/ee06f208b3bca2f935f9a0f1752d21e8.png"></p>
+<p><em>Mounted 2x Missile Turret</em>
+<img alt="2x Missile Turret" src="https://cdn.discordapp.com/attachments/600421724990865439/604232619420286976/bf57be6d0ae6067f9f4fb5589e96d144.png"></p>
+            </div>
+            <!-- /.entry-content -->
+        </article>
+    </section>
+
+        </div>
+        <div class="col-sm-3" id="sidebar">
+            <aside>
+<!-- Sidebar -->
+<section class="well well-sm">
+  <ul class="list-group list-group-flush">
+
+<!-- Sidebar/Social -->
+<li class="list-group-item">
+  <h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Social</span></h4>
+  <ul class="list-group" id="social">
+    <li class="list-group-item"><a href="https://twitter.com/CapitalSpace2"><i class="fa fa-twitter-square fa-lg"></i> Twitter</a></li>
+  </ul>
+</li>
+<!-- End Sidebar/Social -->
+  </ul>
+</section>
+<!-- End Sidebar -->            </aside>
+        </div>
+    </div>
+</div>
+<!-- End Content Container -->
+
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy; 2019 Harry Richardson
+            &middot; Powered by <a href="https://github.com/getpelican/pelican-themes/tree/master/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="/theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="/theme/js/respond.min.js"></script>
+
+
+
+
+</body>
+</html>
